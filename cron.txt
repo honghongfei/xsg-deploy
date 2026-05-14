@@ -1,0 +1,13 @@
+# XSG-Online crontab 模板
+# 编辑：crontab -e ，把下面合适的行粘贴进去。第一次 PATH 行也要带上。
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# 每天凌晨 4 点 SQLite 在线热备，自动清 14 天前的备份
+0 4 * * * bash $HOME/xsg-deploy/backup.sh --root /srv/xsg >> $HOME/xsg-deploy/backup.log 2>&1
+
+# 每周日凌晨 4 点 30 清理过期的 auth_token（可选；高频登录场景）
+30 4 * * 0 cd /srv/xsg/server && /usr/bin/env bash -lc 'npm run gm prune-tokens' >> $HOME/xsg-deploy/gm.log 2>&1
+
+# 每 5 分钟健康自检；如果 healthz 没回 200 则 pm2 重启
+*/5 * * * * curl -fsS http://127.0.0.1:3000/healthz >/dev/null 2>&1 || pm2 restart xsg-server >> $HOME/xsg-deploy/watchdog.log 2>&1
