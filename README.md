@@ -15,10 +15,10 @@
 
 ### 1. 一行部署
 
-SSH 进服务器后，复制粘贴这一行：
+SSH 进服务器后，复制粘贴这一行（把 `<YOU>/xiaoshagua.git` 改成你存放游戏源码的仓库）：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<YOUR-USERNAME>/xsg-deploy/main/install.sh | bash -s -- --repo https://github.com/<YOU>/xiaoshagua.git
+curl -fsSL https://raw.githubusercontent.com/honghongfei/xsg-deploy/main/install.sh | bash -s -- --repo https://github.com/<YOU>/xiaoshagua.git
 ```
 
 它会：
