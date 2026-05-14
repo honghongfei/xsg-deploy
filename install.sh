@@ -146,7 +146,10 @@ npm run migrate || warn "migrate 失败（如果是 idempotent 表已存在可�
 # ---------- 6. pm2 起进程 ----------
 say "6/7 用 pm2 启动 xsg-server"
 pm2 delete xsg-server >/dev/null 2>&1 || true
-pm2 start pm2.config.js --env production
+# pm2 config 文件命名必须 .cjs（package.json 设了 "type":"module"）
+PM2_CFG="pm2.config.cjs"
+[[ -f "$PM2_CFG" ]] || PM2_CFG="pm2.config.js"
+pm2 start "$PM2_CFG" --env production
 pm2 save
 
 PM2_STARTUP_CMD=$(pm2 startup systemd -u "$USER" --hp "$HOME" | tail -n 1 || true)
